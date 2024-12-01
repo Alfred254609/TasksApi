@@ -1,0 +1,180 @@
+Estrutura de Diretórios do Projeto
+
+task-manager/
+│
+├── config/
+│   ├── db.js              # Configuração do banco de dados com Sequelize
+│
+├── controllers/
+│   ├── taskController.js  # Lógica de controle das rotas de tarefas
+│   ├── userController.js  # Lógica de controle das rotas de usuários
+│
+├── middlewares/
+│   ├── authMiddleware.js  # Middleware para autenticação com JWT
+│
+├── models/
+│   ├── task.js            # Definição do modelo Task (tarefa) no Sequelize
+│   ├── user.js            # Definição do modelo User (usuário) no Sequelize
+│
+├── routes/
+│   ├── taskRoutes.js      # Definição das rotas de tarefas
+│   ├── userRoutes.js      # Definição das rotas de usuários
+│
+├── .env                   # Variáveis de ambiente (ex.: chave secreta do JWT, credenciais do DB)
+├── app.js                 # Arquivo principal da aplicação (configuração e inicialização)
+├── package.json           # Dependências e scripts do projeto
+└── README.md              # Documentação do projeto (a ser criada)
+
+
+
+
+Descrição dos Componentes
+1. config/db.js
+Este arquivo configura a conexão do banco de dados usando o Sequelize. Ele conecta a aplicação ao banco de dados MySQL e define os parâmetros de conexão como o usuário, senha e o banco de dados.
+
+2. models/task.js e models/user.js
+Esses arquivos definem os modelos Sequelize que representam as tabelas no banco de dados. O modelo Task (Tarefa) tem colunas como title, description, due_date, etc., e o modelo User (Usuário) possui informações como username, email, password, etc.
+
+Task tem um relacionamento de muitos para um com User, ou seja, cada tarefa está associada a um único usuário.
+3. controllers/taskController.js e controllers/userController.js
+Esses arquivos contêm a lógica que responde às requisições feitas para as rotas de tarefas e usuários. Por exemplo:
+
+taskController.js tem funções como createTask, getTasks, updateTask, deleteTask.
+userController.js tem funções como registerUser (registrar um novo usuário) e loginUser (fazer login e gerar o JWT).
+4. middlewares/authMiddleware.js
+Este arquivo é um middleware que valida o token JWT nas rotas protegidas. Quando um usuário faz login, ele recebe um token que deve ser enviado em requisições subsequentes para autenticação. O middleware vai verificar se esse token é válido antes de permitir o acesso às rotas.
+
+5. routes/taskRoutes.js e routes/userRoutes.js
+Esses arquivos definem as rotas da API. Eles conectam as URLs das requisições (como GET /api/tasks, POST /api/register) às funções do controller (como getTasks ou createTask).
+
+6. app.js
+Este arquivo é o ponto de entrada da aplicação. Ele configura o Express, define o middleware (como bodyParser para processar JSON e authMiddleware para autenticação), e conecta as rotas.
+
+7. package.json
+Esse arquivo contém as dependências do projeto (como express, sequelize, jsonwebtoken, etc.) e scripts que você pode usar (como npm start para iniciar o servidor).
+
+8. README.md
+Aqui você pode colocar a documentação do seu projeto, explicando como instalar, rodar, e testar a aplicação, bem como detalhes sobre as rotas, autenticação, estrutura do banco de dados, e exemplos de requisições.
+
+
+Funcionalidades da API
+1. Cadastro de Usuário (POST /api/register)
+Registra um novo usuário no banco de dados com informações como username, email, e password. Retorna os dados do usuário, com o id gerado pelo banco.
+
+Requisição:
+
+{
+  "username": "novo_usuario",
+  "email": "usuario@email.com",
+  "password": "senha123"
+}
+
+
+Resposta:
+
+{
+  "id": 1,
+  "username": "novo_usuario",
+  "email": "usuario@email.com"
+}
+
+
+2. Login de Usuário (POST /api/login)
+Realiza o login e gera um token JWT para autenticação. O token deve ser enviado nas requisições subsequentes que exigem autenticação.
+
+Requisição:
+
+{
+  "email": "usuario@email.com",
+  "password": "senha123"
+}
+
+Resposta:
+
+{
+  "token": "jwt_token_aqui"
+}
+
+
+3. Listar Tarefas (GET /api/tasks)
+Lista as tarefas do usuário autenticado. Pode filtrar as tarefas por status, priority, e categoryId, e também retornar tarefas vencidas.
+
+Requisição (com token no header):
+
+
+GET /api/tasks?status=pendente&priority=alta
+
+
+
+Resposta:
+
+{
+    "id": 1,
+    "title": "Nova Tarefa",
+    "status": "pendente",
+    "priority": 1,
+    "createdAt": "2024-11-01T10:00:00.000Z",
+    "updatedAt": "2024-11-01T10:00:00.000Z"
+  }
+
+
+4. Criar Tarefa (POST /api/tasks)
+Cria uma nova tarefa associada ao usuário autenticado.
+
+Requisição (com token no header):
+
+{
+  "title": "Nova Tarefa",
+  "description": "Descrição",
+  "due_date": "2024-11-01T00:00:00.000Z",
+  "status": "pendente",
+  "priority": "alta"
+}
+
+Resposta:
+
+{
+  "id": 1,
+  "title": "Nova Tarefa",
+  "status": "pendente",
+  "priority": "alta",
+  "createdAt": "2024-11-14T22:50:45",
+  "updatedAt": "2024-11-14T22:50:45"
+}
+
+
+5. Atualizar Tarefa (PUT /api/tasks/:id)
+Atualiza uma tarefa específica pelo ID.
+
+Requisição (com token no header):
+
+{
+  "title": "Tarefa Atualizada",
+  "description": "Descrição atualizada",
+  "due_date": "2024-12-01T00:00:00.000Z",
+  "status": "in-progress",
+  "priority": "alta"
+}
+
+Resposta:
+
+{
+  "id": 1,
+  "title": "Tarefa Atualizada",
+  "status": "in-progress",
+  "priority": "alta",
+  "updatedAt": "2024-11-15T10:00:00.000Z"
+}
+
+6. Deletar Tarefa (DELETE /api/tasks/:id)
+Deleta uma tarefa específica pelo ID.
+
+Requisição (com token no header):
+
+DELETE /api/tasks/1
+
+Resposta:
+
+{
+  "message": "Tarefa excluída com sucesso."
+}	

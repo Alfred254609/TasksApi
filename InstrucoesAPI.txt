@@ -1,0 +1,75 @@
+1. Cadastro de Usuario
+
+Criar um metodo POST no endereco localhost:5000/api/register
+
+{
+"username": "novo_usuario"
+"email": "usuario@email.com"
+"password": "senha123"
+}
+
+2. Fazer Login com o novo usuario
+
+Criar metodo POST com o endereco:
+
+localhost:5000/api/users/login
+
+sera gerado um TOKEN para colar no HEADER do THUNDER CLIENT para registro, atualizacao e
+retorno das atividades cadastradas
+
+Na secao Headers do THUNDER CLIENT criar um Header como esse:
+
+Authorization          Bearer (colar o TOKEN gerado no login)
+
+3. Cadastro de tarefas
+
+Criar metodo POST no endereco localhost:5000/api/tasks
+
+{
+  "title": "Nova Tarefa",
+  "description": "Descrição da tarefa",
+  "due_date": "2024-11-01",
+  "status": "pendente",
+  "priority": "alta",
+  "categoryId": 1
+}
+
+
+4. Listagem das tarefas cadastradas
+
+Criar metodo GET no endereco localhost:5000/api/tasks. Sera retornado as tarefas cadastradas
+
+5. Atualizacao das tarefas
+
+Criar um metodo PUT no endereco localhost:500/api/tasks/(id da tarefa)
+
+Para atualizar uma tarefa precisa botar o id da tarefa e atualizar o campo que deseja.
+
+localhost:5000/api/tasks/7
+
+{
+  "title": "Tarefa Atualizada",
+  "description": "Descrição atualizada",
+  "due_date": "2024-12-01",
+  "status": "in-progress",
+  "priority": "alta"
+}
+
+Retorno:
+
+{
+  "id": 7,
+  "title": "Tarefa Atualizada",
+  "description": "Descrição atualizada",
+  "due_date": "2024-12-01T00:00:00.000Z",
+  "status": "in-progress",
+  "priority": "alta",
+  "userId": 1,
+  "createdAt": "2024-12-01T15:56:46.000Z",
+  "updatedAt": "2024-12-01T15:57:44.076Z"
+}
+
+
+6. Deletar uma tarefa
+
+Criar um metodo DEL no endereco localhost:5000/api/tasks/(id da tarefa)
